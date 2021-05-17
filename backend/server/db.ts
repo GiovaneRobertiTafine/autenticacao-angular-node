@@ -2,22 +2,28 @@ import * as mongoose from "mongoose";
 
 class DataBase {
     private dbUrl = 'mongodb://localhost:27017/auth';
-    private dbConnection;
+    protected dbConnection = mongoose;
 
     constructor() { }
 
-    createConnection() {
-        mongoose.set('useCreateIndex', true);
-        mongoose.connect(this.dbUrl, { useNewUrlParser: true, useUnifiedTopology: true });
-        this.logger();
+
+    async connect(): Promise<boolean> {
+        this.dbConnection.set('useCreateIndex', true);
+        return await this.dbConnection.connect(this.dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+            .then(() => {
+                console.log('mongoose is connected');
+                return true;
+            })
+            .catch((err) => {
+                console.error.bind(console, 'error in connection: ' + err);
+                return false;
+            });
 
     }
 
-    logger() {
-        this.dbConnection = mongoose.connection;
-        this.dbConnection.on('connected', () => console.log('mongoose is connected'));
-        this.dbConnection.on('error', (error) => console.error.bind(console, 'error in connection: ' + error));
-
+    disconnect() {
+        this.dbConnection.disconnect();
+        console.log('mongoose is disconnected');
     }
 }
 
