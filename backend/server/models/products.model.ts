@@ -14,4 +14,4 @@ const UserSchema: Schema<Product> = new Schema<Product>(
     }
 );
 
-export default model<Product>('products', UserSchema);
+export default model<Product>('Product', UserSchema);

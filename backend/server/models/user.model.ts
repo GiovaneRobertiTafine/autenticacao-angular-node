@@ -33,4 +33,4 @@ UserSchema.methods.fullName = function () {
     return (this.firstName.trim() + " " + this.lastName.trim());
 };
 
-export default model<UserModelInterface>('users', UserSchema);
+export default model<UserModelInterface>('User', UserSchema);
