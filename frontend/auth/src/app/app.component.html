@@ -1,0 +1,14 @@
+<mat-toolbar fxLayout="row" fxLayoutAlign="space-between center">
+    <span>Auth App</span>
+    <div fxLayoutGap="20px">
+        <button mat-mini-fab routerLinkActive #peop="routerLinkActive" [color]="peop.isActive? 'primary': ''"
+            routerLink="/main/people">
+            <mat-icon>home</mat-icon>
+        </button>
+        <button mat-mini-fab routerLinkActive #prod="routerLinkActive" [color]="prod.isActive? 'primary': ''"
+            routerLink="/main/products">
+            <mat-icon>shop</mat-icon>
+        </button>
+    </div>
+</mat-toolbar>
+<router-outlet></router-outlet>

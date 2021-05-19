@@ -1,0 +1,12 @@
+<h3>People</h3>
+
+<div *ngIf="(people$ | async)?.length > 0; else noperson">
+    <ul fxLayout="row wrap" fxLayoutGap="10px" fxLayout.xs="column" fxFlexFill>
+        <li fxFlex="40" fxFlex.xs="100" fxFlex.gt-xs="30" fxFlex.gt-lg="20" *ngFor="let p of (people$ | async)">
+            {{p.name}} | {{p.email}}</li>
+    </ul>
+</div>
+
+<ng-template #noperson>
+    <p>Nenhuma pessoa encontrada</p>
+</ng-template>
