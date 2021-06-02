@@ -2,11 +2,13 @@ import * as express from 'express';
 import * as bodyparser from 'body-parser';
 import database from './db';
 import Api from "./routes/api";
+import Auth from "./routes/auth";
 
 class App {
     public app: express.Application;
     private database: database;
     private api = new Api();
+    private auth = new Auth();
 
     constructor() {
         this.app = express();
@@ -29,6 +31,7 @@ class App {
 
     routes() {
         this.app.use('/api', this.api.routes);
+        this.app.use('/auth', this.auth.routes);
         this.app.route('/').get((req, res) => res.status(200).json({ rest: 'hello world' }));
     }
 }

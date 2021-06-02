@@ -9,6 +9,7 @@ interface User {
     phone: string;
     mobilePhone: string;
     email: string;
+    password?: string;
 }
 
 
@@ -26,6 +27,7 @@ const UserSchema: Schema<UserModelInterface> = new Schema<UserModelInterface>(
         phone: String,
         mobilePhone: String,
         email: String,
+        password: String
     }
 );
 
