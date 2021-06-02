@@ -25,8 +25,8 @@ class App {
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
             next();
         });
-        // this.app.use(bodyparser.json());
-        // this.app.use(bodyparser.urlencoded({ extended: true }));
+        this.app.use(express.json());
+        this.app.use(express.urlencoded({ extended: true }));
     }
 
     routes() {

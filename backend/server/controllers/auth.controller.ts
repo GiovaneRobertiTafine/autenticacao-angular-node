@@ -1,5 +1,5 @@
 import UserModel from '../models/user.model';
-import { bcrypt } from "bcryptjs";
+import { hashSync } from "bcryptjs";
 import { Constantes } from "../consts";
 
 class AuthController {
@@ -11,7 +11,7 @@ class AuthController {
             let u = await UserModel.findOne({ email: req.body.email });
             if (!u) {
                 const user = new UserModel(req.body);
-                user.password = bcrypt.hashSync(req.body.password, Constantes.bcryptSalts);
+                user.password = hashSync(req.body.password, Constantes.bcryptSalts);
                 await user.save();
                 delete user.password;
                 return res.status(200).json(user);
