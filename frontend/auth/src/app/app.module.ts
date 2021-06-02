@@ -12,6 +12,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { LOCALE_ID, DEFAULT_CURRENCY_CODE } from '@angular/core';
 import localePt from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
+import { AuthModule } from './auth/auth.module';
 
 registerLocaleData(localePt, 'pt');
 
@@ -25,7 +26,8 @@ registerLocaleData(localePt, 'pt');
         BrowserAnimationsModule,
         MaterialModule,
         HttpClientModule,
-        FlexLayoutModule
+        FlexLayoutModule,
+        AuthModule
     ],
     providers: [
         {

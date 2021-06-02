@@ -1,6 +1,14 @@
 <mat-toolbar fxLayout="row" fxLayoutAlign="space-between center">
     <span>Auth App</span>
     <div fxLayoutGap="20px">
+        <button mat-button routerLinkActive="mat-primary" routerLink="/auth/login">
+            <mat-icon>input</mat-icon>
+            Sign in
+        </button>
+        <button mat-button routerLinkActive="mat-primary" routerLink="/auth/register">
+            <mat-icon>person_add</mat-icon>
+            Sign Up
+        </button>
         <button mat-mini-fab routerLinkActive #peop="routerLinkActive" [color]="peop.isActive? 'primary': ''"
             routerLink="/main/people">
             <mat-icon>home</mat-icon>
