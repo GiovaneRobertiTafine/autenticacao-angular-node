@@ -8,6 +8,7 @@ class Auth {
     ) {
         this.routes.post('/login', (req, res) => this.authController.login(req, res));
         this.routes.post('/register', (req, res) => this.authController.register(req, res));
+        this.routes.get('/user', this.authController.userData);
     }
 }
 

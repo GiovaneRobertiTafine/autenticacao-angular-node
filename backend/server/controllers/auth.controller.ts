@@ -4,23 +4,7 @@ import { Constantes } from "../consts";
 import { sign, verify } from "jsonwebtoken";
 
 class AuthController {
-    public checkToken: any = (req, res, next) => {
-        const token = req.get('Authorization');
 
-        if (!token) {
-            return res.status(401).json({ message: 'Token não encontrado' });
-        }
-
-        verify(token, Constantes.keyJWT,
-            (err, decoded) => {
-                if (err || !decoded) {
-                    return res.status(401).json({ message: 'Erro com o Token' });
-                }
-
-                next();
-            }
-        );
-    };
 
     constructor() { }
 
@@ -57,7 +41,7 @@ class AuthController {
 
             if (!auth_err) {
                 if (compareSync(password, user.password)) {
-                    let token = sign({ _id: user.id }, Constantes.keyJWT, { expiresIn: Constantes.expiresJWT });
+                    let token = sign({ _id: user._id }, Constantes.keyJWT, { expiresIn: Constantes.expiresJWT });
                     delete user.password;
                     return res.json({
                         ...user, token: token
@@ -70,6 +54,50 @@ class AuthController {
             });
 
         });
+    }
+
+    checkToken(req, res, next) {
+        const token = req.get('Authorization');
+
+        if (!token) {
+            return res.status(401).json({ message: 'Token não encontrado' });
+        }
+
+        verify(token, Constantes.keyJWT,
+            (err, decoded) => {
+                if (err || !decoded) {
+                    return res.status(401).json({ message: 'Erro com o Token' });
+                }
+
+                next();
+            }
+        );
+    };
+
+    userData(req, res) {
+        const token = req.get('Authorization');
+        verify(token, Constantes.keyJWT,
+            (err, decoded) => {
+                if (err || !decoded) {
+                    return res.status(401).json({ message: 'Erro com o Token' });
+                }
+                const id = decoded._id;
+                UserModel.findById(id).lean().exec((err, user) => {
+                    if (err || !user) {
+                        return res.status(500).json({
+                            message: 'Erro ao encontrar usuario', error: err
+                        });
+                    }
+
+                    let token = sign({ _id: user._id }, Constantes.keyJWT, { expiresIn: Constantes.expiresJWT });
+                    delete user.password;
+                    return res.json({
+                        ...user, token: token
+                    });
+                });
+
+            }
+        );
     }
 
 }

@@ -1,5 +1,5 @@
 <mat-toolbar fxLayout="row" fxLayoutAlign="space-between center">
-    <span>Auth App</span>
+    <span>Auth App {{(authenticated$ | async)}}</span>
     <div fxLayoutGap="20px">
         <ng-container *ngIf="!(authenticated$ | async)">
             <button mat-button routerLinkActive="mat-primary" routerLink="/auth/login">

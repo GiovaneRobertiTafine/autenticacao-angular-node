@@ -1,5 +1,5 @@
 export const Constantes = {
     bcryptSalts: 10,
     keyJWT: '1234567890',
-    expiresJWT: 5
+    expiresJWT: 10
 }

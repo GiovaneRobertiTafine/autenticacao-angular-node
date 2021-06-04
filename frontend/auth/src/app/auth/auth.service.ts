@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import { User } from './user';
 
 @Injectable({
@@ -22,15 +22,42 @@ export class AuthService {
         return this.http.post<User>(`${this.url}/login`, credentials)
             .pipe(
                 tap((u: User) => {
-                    localStorage.setItem('token', u.token);
+                    this.setToken(u);
                     this.subLoggedIn$.next(true);
+                    console.log(this.subLoggedIn$.value);
                     this.subUser$.next(u);
                 })
             );
     }
 
     isAuthenticated(): Observable<boolean> {
+        const token = this.getToken();
+        if (token && !this.subLoggedIn$.value) {
+            return this.checkTokenValidation();
+        }
         return this.subLoggedIn$;
+    }
+
+    checkTokenValidation(): Observable<boolean> {
+        return this.http.get<User>(`${this.url}/user`)
+            .pipe(
+                tap(
+                    (u: User) => {
+                        if (u) {
+                            this.setToken(u);
+                            this.subLoggedIn$.next(true);
+                            this.subUser$.next(u);
+                        }
+                    }
+                ),
+                map((u: User) => (u) ? true : false),
+                catchError((err) => {
+                    this.logout();
+                    this.subLoggedIn$.next(false);
+                    this.subUser$.next(null);
+                    return of(false);
+                })
+            );
     }
 
     getUser(): Observable<User> {
@@ -39,11 +66,16 @@ export class AuthService {
 
     logout(): void {
         localStorage.removeItem('token');
+        console.log('logout');
         this.subLoggedIn$.next(false);
         this.subUser$.next(null);
     }
 
     getToken(): string {
         return localStorage.getItem('token');
+    }
+
+    setToken(u: User): void {
+        localStorage.setItem('token', u.token);
     }
 }

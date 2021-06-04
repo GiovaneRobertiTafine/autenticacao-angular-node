@@ -13,10 +13,6 @@ class Api {
         this.routes.use(this.authController.checkToken);
         this.routes.get('/people', (req, res) => this.personController.getUsers(req, res));
         this.routes.get('/products', (req, res) => this.productController.getProducts(req, res));
-        this.getRoutes();
-    }
-
-    getRoutes() {
 
     }
 }
