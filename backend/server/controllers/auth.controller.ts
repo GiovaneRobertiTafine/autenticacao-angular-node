@@ -1,9 +1,26 @@
 import UserModel from '../models/user.model';
 import { hashSync, compareSync } from "bcryptjs";
 import { Constantes } from "../consts";
-import { sign } from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
 
 class AuthController {
+    public checkToken: any = (req, res, next) => {
+        const token = req.get('Authorization');
+
+        if (!token) {
+            return res.status(401).json({ message: 'Token não encontrado' });
+        }
+
+        verify(token, Constantes.keyJWT,
+            (err, decoded) => {
+                if (err || !decoded) {
+                    return res.status(401).json({ message: 'Erro com o Token' });
+                }
+
+                next();
+            }
+        );
+    };
 
     constructor() { }
 
@@ -54,6 +71,7 @@ class AuthController {
 
         });
     }
+
 }
 
 export default AuthController;
