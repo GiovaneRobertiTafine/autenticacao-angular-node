@@ -7,12 +7,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 
 import { LOCALE_ID, DEFAULT_CURRENCY_CODE } from '@angular/core';
 import localePt from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
 import { AuthModule } from './auth/auth.module';
+import { AuthInterceptor } from './auth/auth-interceptor';
 
 registerLocaleData(localePt, 'pt');
 
@@ -27,7 +28,8 @@ registerLocaleData(localePt, 'pt');
         MaterialModule,
         HttpClientModule,
         FlexLayoutModule,
-        AuthModule
+        // AuthModule
+        AuthModule.forRoot()
     ],
     providers: [
         {
@@ -41,6 +43,17 @@ registerLocaleData(localePt, 'pt');
             provide: DEFAULT_CURRENCY_CODE,
             useValue: 'BRL'
         },
+
+        /**
+         * Configuração abaixo é para ser utilizado se por acaso
+         * o interceptor fosse inserido somente no modulo app module
+         */
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true
+        }
+
     ],
     bootstrap: [AppComponent]
 })

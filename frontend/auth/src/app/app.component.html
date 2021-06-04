@@ -1,22 +1,46 @@
 <mat-toolbar fxLayout="row" fxLayoutAlign="space-between center">
     <span>Auth App</span>
     <div fxLayoutGap="20px">
-        <button mat-button routerLinkActive="mat-primary" routerLink="/auth/login">
-            <mat-icon>input</mat-icon>
-            Sign in
-        </button>
-        <button mat-button routerLinkActive="mat-primary" routerLink="/auth/register">
-            <mat-icon>person_add</mat-icon>
-            Sign Up
-        </button>
-        <button mat-mini-fab routerLinkActive #peop="routerLinkActive" [color]="peop.isActive? 'primary': ''"
-            routerLink="/main/people">
-            <mat-icon>home</mat-icon>
-        </button>
-        <button mat-mini-fab routerLinkActive #prod="routerLinkActive" [color]="prod.isActive? 'primary': ''"
-            routerLink="/main/products">
-            <mat-icon>shop</mat-icon>
-        </button>
+        <ng-container *ngIf="!(authenticated$ | async)">
+            <button mat-button routerLinkActive="mat-primary" routerLink="/auth/login">
+                <mat-icon>input</mat-icon>
+                Sign in
+            </button>
+            <button mat-button routerLinkActive="mat-primary" routerLink="/auth/register">
+                <mat-icon>person_add</mat-icon>
+                Sign Up
+            </button>
+        </ng-container>
+
+        <ng-container *ngIf="(authenticated$ | async) && (user$ | async)">
+            <button mat-mini-fab routerLinkActive #peop="routerLinkActive" [color]="peop.isActive? 'primary': ''"
+                routerLink="/main/people">
+                <mat-icon>home</mat-icon>
+            </button>
+            <button mat-mini-fab routerLinkActive #prod="routerLinkActive" [color]="prod.isActive? 'primary': ''"
+                routerLink="/main/products">
+                <mat-icon>shop</mat-icon>
+            </button>
+            <button mat-icon-button title="Sair" (click)="logout()">
+                <mat-icon>exit_to_app</mat-icon>
+            </button>
+
+
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="icon-button with a menu">
+                <mat-icon>account_circle</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <p [style.margin]="'10px'">
+
+                    {{(user$ | async)?.email}}
+                </p>
+                <mat-divider></mat-divider>
+                <button mat-menu-item (click)="logout()">
+                    <mat-icon>exit_to_app</mat-icon>
+                    <span>Sair</span>
+                </button>
+            </mat-menu>
+        </ng-container>
     </div>
 </mat-toolbar>
 <router-outlet></router-outlet>

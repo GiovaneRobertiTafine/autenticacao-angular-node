@@ -3,6 +3,7 @@ import * as bodyparser from 'body-parser';
 import database from './db';
 import Api from "./routes/api";
 import Auth from "./routes/auth";
+import * as cors from "cors";
 
 class App {
     public app: express.Application;
@@ -20,11 +21,21 @@ class App {
     }
 
     middleware() {
-        this.app.use(function (req, res, next) {
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-            next();
-        });
+        // this.app.use(function (req, res, next) {
+        //     res.header("Access-Control-Allow-Origin", "*");
+        //     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        //     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+        //     res.header("Access-Control-Request-Headers", 'Content-Type, application/json, text/plain, */*');
+        //     next();
+        // });
+        const allowedOrigins = ['http://localhost:4200'];
+
+        const options: cors.CorsOptions = {
+            origin: allowedOrigins
+        };
+
+        // Then pass these options to cors:
+        this.app.use(cors(options));
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
     }
