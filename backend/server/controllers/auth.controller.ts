@@ -1,6 +1,7 @@
 import UserModel from '../models/user.model';
-import { hashSync } from "bcryptjs";
+import { hashSync, compareSync } from "bcryptjs";
 import { Constantes } from "../consts";
+import { sign } from "jsonwebtoken";
 
 class AuthController {
 
@@ -26,7 +27,32 @@ class AuthController {
     }
 
     login(req, res) {
+        const password = req.body.password;
+        const email = req.body.email;
 
+        UserModel.findOne({ email: email }).lean().exec((err, user) => {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Server error', error: err
+                });
+            }
+            const auth_err = (password === '' || password === null || !user);
+
+            if (!auth_err) {
+                if (compareSync(password, user.password)) {
+                    let token = sign({ _id: user.id }, Constantes.keyJWT, { expiresIn: Constantes.expiresJWT });
+                    delete user.password;
+                    return res.json({
+                        ...user, token: token
+                    });
+                }
+            }
+
+            return res.status(404).json({
+                meesage: 'Erro em e-mail ou senha'
+            });
+
+        });
     }
 }
 

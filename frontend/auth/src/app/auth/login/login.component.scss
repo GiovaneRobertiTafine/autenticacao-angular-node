@@ -1,0 +1,16 @@
+.login-card {
+    width: 400px;
+    margin-top: 100px;
+}
+
+::ng-deep .error {
+    color: #ffffff !important; // green
+    background-color: #e44a4a !important;
+
+}
+
+::ng-deep .success {
+    color: #ffffff !important; // green
+    background-color: #4ae471 !important;
+
+}
