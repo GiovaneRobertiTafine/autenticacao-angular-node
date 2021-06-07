@@ -24,7 +24,6 @@ export class AuthService {
                 tap((u: User) => {
                     this.setToken(u);
                     this.subLoggedIn$.next(true);
-                    console.log(this.subLoggedIn$.value);
                     this.subUser$.next(u);
                 })
             );
